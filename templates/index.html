@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PhishGuard | AI Phishing Awareness Platform</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            <div>
+                <h2>PhishGuard</h2>
+                <span>AI Security Platform</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a href="#" class="nav-item active">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="/simulations" class="nav-item">
+                <span>🎯</span>
+                Simulations
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>🤖</span>
+                AI Analyzer
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>📈</span>
+                Analytics
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>🎓</span>
+                Awareness Training
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>📋</span>
+                Reports
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="security-status">
+                <div class="status-dot"></div>
+
+                <div>
+                    <strong>System Secure</strong>
+                    <small>All services operational</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+
+            <div>
+                <p class="breadcrumb">Security / Dashboard</p>
+                <h1>Security Dashboard</h1>
+            </div>
+
+            <div class="profile">
+
+                <div class="notification">
+                    🔔
+                    <span></span>
+                </div>
+
+                <div class="avatar">
+                    A
+                </div>
+
+                <div class="profile-info">
+                    <strong>Admin</strong>
+                    <small>Security Analyst</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+
+            <div>
+                <h2>Welcome back 👋</h2>
+
+                <p>
+                    Monitor phishing simulations, analyze threats,
+                    and improve security awareness.
+                </p>
+            </div>
+
+            <a href="{{ url_for('create_simulation') }}" class="primary-btn">
+    + Create Simulation
+</a>
+
+        </section>
+
+
+        <!-- Statistics Cards -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    🎯
+                </div>
+
+                <div>
+                    <p>Total Simulations</p>
+                    <h3>12</h3>
+                    <span class="positive">↑ 12% this month</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    👥
+                </div>
+
+                <div>
+                    <p>Participants</p>
+                    <h3>248</h3>
+                    <span class="positive">↑ 8% this month</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    ⚠️
+                </div>
+
+                <div>
+                    <p>Phishing Click Rate</p>
+                    <h3>18%</h3>
+                    <span class="negative">↓ 5% improvement</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    🛡️
+                </div>
+
+                <div>
+                    <p>Security Score</p>
+                    <h3>82%</h3>
+                    <span class="positive">↑ 9% improvement</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Analytics -->
+        <section class="analytics-grid">
+
+            <!-- Simulation Performance -->
+            <div class="panel large-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Simulation Performance</h3>
+                        <p>Phishing simulation results</p>
+                    </div>
+
+                    <select>
+                        <option>Last 6 Months</option>
+                        <option>Last 30 Days</option>
+                        <option>Last 7 Days</option>
+                    </select>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="simulationChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <!-- Risk Distribution -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Risk Distribution</h3>
+                        <p>Current participant risk</p>
+                    </div>
+
+                </div>
+
+                <div class="pie-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+
+                <div class="risk-legend">
+
+                    <div>
+                        <span class="legend-dot high"></span>
+                        High Risk
+                        <strong>18%</strong>
+                    </div>
+
+                    <div>
+                        <span class="legend-dot medium"></span>
+                        Medium Risk
+                        <strong>32%</strong>
+                    </div>
+
+                    <div>
+                        <span class="legend-dot low"></span>
+                        Low Risk
+                        <strong>50%</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Bottom Section -->
+        <section class="bottom-grid">
+
+            <!-- Recent Simulations -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Recent Simulations</h3>
+                        <p>Latest phishing campaigns</p>
+                    </div>
+
+                    <button class="text-btn">
+                        View All →
+                    </button>
+
+                </div>
+
+                <div class="simulation-list">
+
+                    <div class="simulation-item">
+
+                        <div class="simulation-icon">
+                            📧
+                        </div>
+
+                        <div class="simulation-info">
+                            <strong>Fake Password Reset</strong>
+                            <small>Completed • 84 participants</small>
+                        </div>
+
+                        <span class="risk-badge medium-badge">
+                            Medium
+                        </span>
+
+                    </div>
+
+
+                    <div class="simulation-item">
+
+                        <div class="simulation-icon">
+                            💳
+                        </div>
+
+                        <div class="simulation-info">
+                            <strong>Payment Verification</strong>
+                            <small>Completed • 62 participants</small>
+                        </div>
+
+                        <span class="risk-badge high-badge">
+                            High
+                        </span>
+
+                    </div>
+
+
+                    <div class="simulation-item">
+
+                        <div class="simulation-icon">
+                            🔐
+                        </div>
+
+                        <div class="simulation-info">
+                            <strong>Account Security Alert</strong>
+                            <small>Completed • 102 participants</small>
+                        </div>
+
+                        <span class="risk-badge low-badge">
+                            Low
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI Threat Analysis -->
+            <div class="panel ai-panel">
+
+                <div class="ai-header">
+
+                    <div class="ai-icon">
+                        🤖
+                    </div>
+
+                    <div>
+                        <h3>AI Threat Analyzer</h3>
+                        <p>Intelligent phishing detection</p>
+                    </div>
+
+                </div>
+
+                <div class="ai-score">
+
+                    <div class="score-circle">
+                        <span>87%</span>
+                    </div>
+
+                    <div>
+                        <strong>Threat Detection Accuracy</strong>
+
+                        <p>
+                            AI analysis is identifying suspicious
+                            phishing indicators effectively.
+                        </p>
+                    </div>
+
+                </div>
+
+                <button class="secondary-btn">
+                    Analyze Email →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Footer -->
+        <footer>
+
+            <p>
+                AI-Based Ethical Phishing Simulation & Awareness Platform
+            </p>
+
+            <span>
+                Built for cybersecurity awareness
+            </span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- Charts -->
+    <script>
+
+        // Simulation Performance Chart
+
+        const simulationCtx =
+            document.getElementById('simulationChart');
+
+        new Chart(simulationCtx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: [
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep'
+                ],
+
+                datasets: [
+
+                    {
+                        label: 'Clicked',
+                        data: [32, 28, 35, 27, 24, 18],
+                        backgroundColor: '#ef4444',
+                        borderRadius: 6
+                    },
+
+                    {
+                        label: 'Reported',
+                        data: [12, 18, 20, 24, 29, 36],
+                        backgroundColor: '#22c55e',
+                        borderRadius: 6
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        position: 'bottom'
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+                        beginAtZero: true
+                    }
+
+                }
+
+            }
+
+        });
+
+
+        // Risk Distribution Pie Chart
+
+        const riskCtx =
+            document.getElementById('riskChart');
+
+        new Chart(riskCtx, {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: [
+                    'High Risk',
+                    'Medium Risk',
+                    'Low Risk'
+                ],
+
+                datasets: [
+
+                    {
+                        data: [18, 32, 50],
+
+                        backgroundColor: [
+                            '#ef4444',
+                            '#f59e0b',
+                            '#22c55e'
+                        ],
+
+                        borderWidth: 0
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                cutout: '68%',
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

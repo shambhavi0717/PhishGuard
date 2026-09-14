@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Simulations | PhishGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* Simulation page specific styling */
+
+        .simulation-page {
+            padding-bottom: 30px;
+        }
+
+        .page-intro {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 28px 0 24px;
+        }
+
+        .page-intro h2 {
+            margin-bottom: 5px;
+            color: #172033;
+            font-size: 24px;
+        }
+
+        .page-intro p {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .simulation-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .simulation-stat {
+            background: #ffffff;
+            border: 1px solid #e7ebf2;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        }
+
+        .simulation-stat p {
+            color: #687386;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .simulation-stat h3 {
+            color: #172033;
+            font-size: 25px;
+            margin-bottom: 3px;
+        }
+
+        .simulation-stat span {
+            color: #16a34a;
+            font-size: 11px;
+        }
+
+        .simulation-main {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.8fr);
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .campaign-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campaign-card {
+            display: grid;
+            grid-template-columns: 45px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 14px;
+            padding: 17px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .campaign-card:last-child {
+            border-bottom: none;
+        }
+
+        .campaign-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef4ff;
+            border-radius: 11px;
+            font-size: 19px;
+        }
+
+        .campaign-info strong {
+            display: block;
+            color: #172033;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .campaign-info small {
+            display: block;
+            color: #8a94a6;
+            font-size: 11px;
+        }
+
+        .campaign-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-completed {
+            background: #eaf9ef;
+            color: #16a34a;
+        }
+
+        .status-active {
+            background: #eaf2ff;
+            color: #2563eb;
+        }
+
+        .status-draft {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .performance-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .performance-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .performance-row span {
+            color: #667085;
+            font-size: 12px;
+        }
+
+        .performance-row strong {
+            color: #172033;
+            font-size: 13px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 7px;
+            margin-top: 7px;
+            background: #edf1f7;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+        .progress-green {
+            background: #22c55e;
+        }
+
+        .progress-orange {
+            background: #f59e0b;
+        }
+
+        .simulation-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .info-box {
+            background: #ffffff;
+            border: 1px solid #e7ebf2;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        }
+
+        .info-box h4 {
+            color: #172033;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #7c8799;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1000px) {
+            .simulation-main {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .simulation-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .simulation-info-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .page-intro {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .page-intro .primary-btn {
+                width: 100%;
+            }
+
+            .simulation-stats {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .campaign-card {
+                grid-template-columns: 42px minmax(0, 1fr);
+            }
+
+            .campaign-status {
+                grid-column: 2;
+                justify-self: start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+
+            <div>
+                <h2>PhishGuard</h2>
+                <span>AI Security Platform</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-item">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="/simulations" class="nav-item active">
+                <span>🎯</span>
+                Simulations
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>🤖</span>
+                AI Analyzer
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>📈</span>
+                Analytics
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>🎓</span>
+                Awareness Training
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>📋</span>
+                Reports
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="security-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Secure</strong>
+                    <small>All services operational</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content simulation-page">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <div class="breadcrumb">
+                    Security / Simulations
+                </div>
+
+                <h1>Phishing Simulations</h1>
+            </div>
+
+            <div class="profile">
+
+                <div class="notification">
+                    🔔
+                    <span></span>
+                </div>
+
+                <div class="avatar">
+                    A
+                </div>
+
+                <div class="profile-info">
+                    <strong>Admin</strong>
+                    <small>Security Analyst</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE INTRO -->
+        <section class="page-intro">
+
+            <div>
+                <h2>Simulation Management</h2>
+
+                <p>
+                    Create, manage and monitor phishing awareness campaigns.
+                </p>
+            </div>
+
+            <button class="primary-btn">
+                + Create Simulation
+            </button>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="simulation-stats">
+
+            <div class="simulation-stat">
+                <p>Total Simulations</p>
+                <h3>12</h3>
+                <span>↑ 12% this month</span>
+            </div>
+
+            <div class="simulation-stat">
+                <p>Total Participants</p>
+                <h3>248</h3>
+                <span>↑ 8% this month</span>
+            </div>
+
+            <div class="simulation-stat">
+                <p>Average Click Rate</p>
+                <h3>18%</h3>
+                <span>↓ 5% improvement</span>
+            </div>
+
+        </section>
+
+
+        <!-- MAIN SIMULATION AREA -->
+        <section class="simulation-main">
+
+            <!-- RECENT CAMPAIGNS -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Recent Simulations</h3>
+
+                        <p>
+                            Latest phishing awareness campaigns
+                        </p>
+                    </div>
+
+                    <button class="text-btn">
+                        View All →
+                    </button>
+
+                </div>
+
+
+                <div class="campaign-list">
+
+                    {% if simulations %}
+
+    {% for simulation in simulations %}
+
+        <a href="{{ url_for('simulation_details', simulation_id=simulation['id']) }}" class="campaign-link">
+    <div class="campaign-card">
+
+            <div class="campaign-icon">
+                ✉️
+            </div>
+
+            <div class="campaign-info">
+
+                <strong>
+                    {{ simulation["name"] }}
+                </strong>
+
+                <small>
+                    Draft · {{ simulation["target_group"] }} · {{ simulation["duration"] }}
+                </small>
+
+            </div>
+
+            <span class="campaign-status status-draft">
+                Draft
+            </span>
+
+        </div>
+        </a>
+    {% endfor %}
+
+{% else %}
+
+    <div class="campaign-card">
+
+        <div class="campaign-icon">
+            📭
+        </div>
+
+        <div class="campaign-info">
+
+            <strong>No simulations yet</strong>
+
+            <small>
+                Create your first phishing awareness campaign.
+            </small>
+
+        </div>
+
+        <span class="campaign-status status-draft">
+            Empty
+        </span>
+
+    </div>
+
+{% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- PERFORMANCE -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Campaign Performance</h3>
+
+                        <p>
+                            Current awareness metrics
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="performance-list">
+
+                    <div>
+
+                        <div class="performance-row">
+                            <span>Emails Delivered</span>
+                            <strong>248</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill"
+                                 style="width: 96%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="performance-row">
+                            <span>Emails Opened</span>
+                            <strong>82%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill"
+                                 style="width: 82%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="performance-row">
+                            <span>Links Clicked</span>
+                            <strong>18%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-orange"
+                                 style="width: 18%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="performance-row">
+                            <span>Reported as Phishing</span>
+                            <strong>64%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-green"
+                                 style="width: 64%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="performance-row">
+                            <span>Security Awareness</span>
+                            <strong>82%</strong>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-green"
+                                 style="width: 82%;">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMATION BOXES -->
+        <section class="simulation-info-grid">
+
+            <div class="info-box">
+
+                <h4>🎯 Targeted Awareness</h4>
+
+                <p>
+                    Simulations help identify common phishing behaviors
+                    and improve employee security awareness.
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h4>🤖 AI-Assisted Analysis</h4>
+
+                <p>
+                    Suspicious email indicators can be reviewed using
+                    AI-based phishing analysis techniques.
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h4>📊 Continuous Improvement</h4>
+
+                <p>
+                    Campaign results can be used to track click rates,
+                    reporting behavior and overall security improvement.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer>
+
+            <p>
+                AI-Based Ethical Phishing Simulation & Awareness Platform
+            </p>
+
+            <span>
+                Built for cybersecurity awareness
+            </span>
+
+        </footer>
+
+    </main>
+
+</body>
+</html>
