@@ -137,8 +137,8 @@
 
                 <div>
                     <p>Total Simulations</p>
-                    <h3>12</h3>
-                    <span class="positive">↑ 12% this month</span>
+                    <h3>{{ total_simulations }}</h3>
+                    <span class="positive">Live database count</span>
                 </div>
 
             </div>
@@ -152,8 +152,8 @@
 
                 <div>
                     <p>Participants</p>
-                    <h3>248</h3>
-                    <span class="positive">↑ 8% this month</span>
+                    <h3>{{ total_participants }}</h3>
+                    <span class="positive">Live database count</span>
                 </div>
 
             </div>
@@ -167,8 +167,8 @@
 
                 <div>
                     <p>Phishing Click Rate</p>
-                    <h3>18%</h3>
-                    <span class="negative">↓ 5% improvement</span>
+                    <h3>{{ "%.1f"|format(click_rate) }}%</h3>
+                    <span class="negative">Live database calculation</span>
                 </div>
 
             </div>
@@ -181,10 +181,10 @@
                 </div>
 
                 <div>
-                    <p>Security Score</p>
-                    <h3>82%</h3>
-                    <span class="positive">↑ 9% improvement</span>
-                </div>
+              <p>Security Score</p>
+              <h3>{{ awareness_score|round(0) }}%</h3>
+              <span class="positive">Live database calculation</span>
+              </div>
 
             </div>
 
@@ -240,19 +240,19 @@
                     <div>
                         <span class="legend-dot high"></span>
                         High Risk
-                        <strong>18%</strong>
+                        <strong>{{ ((high_risk / total_simulations) * 100)|round|int if total_simulations > 0 else 0 }}%</strong>
                     </div>
 
                     <div>
                         <span class="legend-dot medium"></span>
                         Medium Risk
-                        <strong>32%</strong>
+                        <strong>{{ ((medium_risk / total_simulations) * 100)|round|int if total_simulations > 0 else 0 }}%</strong>
                     </div>
 
                     <div>
                         <span class="legend-dot low"></span>
                         Low Risk
-                        <strong>50%</strong>
+                        <strong>{{ ((low_risk / total_simulations) * 100)|round|int if total_simulations > 0 else 0 }}%</strong>
                     </div>
 
                 </div>
@@ -281,64 +281,70 @@
 
                 </div>
 
-                <div class="simulation-list">
+               <div class="simulation-list">
 
-                    <div class="simulation-item">
+    {% if recent_simulations %}
 
-                        <div class="simulation-icon">
-                            📧
-                        </div>
+        {% for simulation in recent_simulations %}
 
-                        <div class="simulation-info">
-                            <strong>Fake Password Reset</strong>
-                            <small>Completed • 84 participants</small>
-                        </div>
+            <a href="{{ url_for('simulation_details', simulation_id=simulation['id']) }}"
+               class="simulation-link">
 
-                        <span class="risk-badge medium-badge">
-                            Medium
-                        </span>
+                <div class="simulation-item">
+
+                    <div class="simulation-icon">
+                        ✉️
+                    </div>
+
+                    <div class="simulation-info">
+
+                        <strong>
+                            {{ simulation["name"] }}
+                        </strong>
+
+                        <small>
+                            Draft •
+                            {{ simulation["target_group"] }} •
+                            {{ simulation["duration"] }}
+                        </small>
 
                     </div>
 
-
-                    <div class="simulation-item">
-
-                        <div class="simulation-icon">
-                            💳
-                        </div>
-
-                        <div class="simulation-info">
-                            <strong>Payment Verification</strong>
-                            <small>Completed • 62 participants</small>
-                        </div>
-
-                        <span class="risk-badge high-badge">
-                            High
-                        </span>
-
-                    </div>
-
-
-                    <div class="simulation-item">
-
-                        <div class="simulation-icon">
-                            🔐
-                        </div>
-
-                        <div class="simulation-info">
-                            <strong>Account Security Alert</strong>
-                            <small>Completed • 102 participants</small>
-                        </div>
-
-                        <span class="risk-badge low-badge">
-                            Low
-                        </span>
-
-                    </div>
+                    <span class="risk-badge medium-badge">
+                        Draft
+                    </span>
 
                 </div>
 
+            </a>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="simulation-item">
+
+            <div class="simulation-icon">
+                📭
             </div>
+
+            <div class="simulation-info">
+
+                <strong>
+                    No simulations yet
+                </strong>
+
+                <small>
+                    Create your first phishing awareness campaign.
+                </small>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
 
 
             <!-- AI Threat Analysis -->
@@ -413,34 +419,35 @@
 
             data: {
 
-                labels: [
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep'
-                ],
+    labels: [
+        'Delivered',
+        'Opened',
+        'Clicked',
+        'Reported'
+    ],
 
-                datasets: [
+    datasets: [
+        {
+            label: 'Campaign Activity',
 
-                    {
-                        label: 'Clicked',
-                        data: [32, 28, 35, 27, 24, 18],
-                        backgroundColor: '#ef4444',
-                        borderRadius: 6
-                    },
+            data: [
+                Number('{{ total_delivered }}'),
+                Number('{{ total_opened }}'),
+                Number('{{ total_clicked }}'),
+                Number('{{ total_reported }}')
+            ],
 
-                    {
-                        label: 'Reported',
-                        data: [12, 18, 20, 24, 29, 36],
-                        backgroundColor: '#22c55e',
-                        borderRadius: 6
-                    }
+            backgroundColor: [
+                '#2563eb',
+                '#22c55e',
+                '#ef4444',
+                '#f59e0b'
+            ],
 
-                ]
-
-            },
+            borderRadius: 6
+        }
+    ]
+},
 
             options: {
 
@@ -489,7 +496,11 @@
                 datasets: [
 
                     {
-                        data: [18, 32, 50],
+                        data: [
+                              Number('{{ high_risk }}'),
+                              Number('{{ medium_risk }}'),
+                              Number('{{ low_risk }}')
+                             ],
 
                         backgroundColor: [
                             '#ef4444',

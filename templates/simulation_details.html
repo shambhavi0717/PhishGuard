@@ -118,7 +118,70 @@
             background: #e2e8f0;
         }
 
+        .btn-simulate {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 9px;
+            background: #0f2a4a;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-simulate:hover {
+            background: #163b63;
+        }
+
+        .details-actions form {
+            margin: 0;
+        }
+
+                /* Campaign Metrics */
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .metric-card {
+            background: #f8fafc;
+            border: 1px solid #edf1f5;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .metric-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            display: block;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f2a4a;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            display: block;
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .awareness-score {
+            color: #16a34a;
+        }
+
         @media (max-width: 700px) {
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            } 
+
             .details-page {
                 padding: 20px;
             }
@@ -207,6 +270,78 @@
             </div>
 
 
+                        <!-- CAMPAIGN METRICS -->
+            <div class="details-card">
+
+                <h2>Campaign Performance</h2>
+                <div style="margin: 20px 0;">
+    <a href="{{ url_for('simulate_campaign', simulation_id=simulation['id']) }}"
+       style="display: inline-block;
+              padding: 12px 20px;
+              background: #2563eb;
+              color: white;
+              text-decoration: none;
+              border-radius: 8px;
+              font-weight: 600;">
+        ▶ Simulate Campaign Activity
+    </a>
+</div>
+
+                <div class="metrics-grid">
+
+                    <div class="metric-card">
+                        <div class="metric-icon">👥</div>
+                        <span class="metric-value">
+                            {{ metrics["participants"] if metrics else 0 }}
+                        </span>
+                        <span class="metric-label">Participants</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">📧</div>
+                        <span class="metric-value">
+                            {{ metrics["emails_delivered"] if metrics else 0 }}
+                        </span>
+                        <span class="metric-label">Emails Delivered</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">👀</div>
+                        <span class="metric-value">
+                            {{ metrics["emails_opened"] if metrics else 0 }}
+                        </span>
+                        <span class="metric-label">Emails Opened</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">🔗</div>
+                        <span class="metric-value">
+                            {{ metrics["links_clicked"] if metrics else 0 }}
+                        </span>
+                        <span class="metric-label">Links Clicked</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">🚩</div>
+                        <span class="metric-value">
+                            {{ metrics["reported"] if metrics else 0 }}
+                        </span>
+                        <span class="metric-label">Reported</span>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">🎯</div>
+                        <span class="metric-value awareness-score">
+                            {{ "%.1f"|format(metrics["awareness_score"]) if metrics else "0.0" }}%
+                        </span>
+                        <span class="metric-label">Awareness Score</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
             <!-- DESCRIPTION -->
             <div class="details-card">
 
@@ -222,18 +357,14 @@
 
 
             <!-- ACTIONS -->
-            <div class="details-actions">
+<div class="details-actions">
 
-                <a href="/simulations" class="btn-back">
-                    ← Back to Simulations
-                </a>
+    <a href="{{ url_for('simulate_campaign', simulation_id=simulation['id']) }}" class="simulate-btn">
+        ▶ Simulate Campaign Activity
+    </a>
 
-            </div>
+    <a href="/simulations" class="btn-back">
+        ← Back to Simulations
+    </a>
 
-        </div>
-
-    </main>
-
-</body>
-
-</html>
+</div>

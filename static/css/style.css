@@ -1141,3 +1141,13 @@ footer span {
     text-decoration: none;
     color: inherit;
 }
+
+.simulation-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.simulation-link:hover {
+    text-decoration: none;
+}
