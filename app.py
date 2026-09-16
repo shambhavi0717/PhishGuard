@@ -1,9 +1,9 @@
 from multiprocessing.dummy import connection
-
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import os
 import random
+import pickle
 
 app = Flask(__name__)
 
@@ -70,6 +70,7 @@ init_db()
 # -----------------------------
 @app.route("/")
 def home():
+    ai_result = request.args.get("ai_result")
 
     connection = get_db_connection()
 
@@ -173,7 +174,32 @@ def home():
         high_risk=high_risk,
         medium_risk=medium_risk,
         low_risk=low_risk,
-        recent_simulations=recent_simulations
+        recent_simulations=recent_simulations,
+        ai_result=ai_result
+    )
+
+# AI Email Analyzer
+@app.route("/analyze_email", methods=["POST"])
+def analyze_email():
+    email_text = request.form.get("email_text", "").strip()
+
+    if not email_text:
+        return redirect(url_for("home"))
+
+    with open("ai/phishing_model.pkl", "rb") as file:
+        model = pickle.load(file)
+
+    with open("ai/tfidf_vectorizer.pkl", "rb") as file:
+        vectorizer = pickle.load(file)
+
+    email_vector = vectorizer.transform([email_text])
+    prediction = model.predict(email_vector)[0]
+
+    return redirect(
+        url_for(
+            "home",
+            ai_result=prediction
+        )
     )
 
 

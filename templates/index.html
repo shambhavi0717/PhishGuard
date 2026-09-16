@@ -358,31 +358,59 @@
 
                     <div>
                         <h3>AI Threat Analyzer</h3>
-                        <p>Intelligent phishing detection</p>
-                    </div>
+<p>Intelligent phishing detection</p>
 
-                </div>
+<form method="POST" action="/analyze_email">
 
-                <div class="ai-score">
+    <textarea
+        name="email_text"
+        placeholder="Paste an email message here to analyze..."
+        required
+        style="
+            width: 100%;
+            min-height: 120px;
+            margin-top: 18px;
+            padding: 14px;
+            border: 1px solid #d9e2f2;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            box-sizing: border-box;
+        "
+    ></textarea>
 
-                    <div class="score-circle">
-                        <span>87%</span>
-                    </div>
+    <button
+        type="submit"
+        class="secondary-btn"
+        style="margin-top: 14px;"
+    >
+        Analyze Email →
+    </button>
 
-                    <div>
-                        <strong>Threat Detection Accuracy</strong>
+</form>
 
-                        <p>
-                            AI analysis is identifying suspicious
-                            phishing indicators effectively.
-                        </p>
-                    </div>
+{% if ai_result %}
 
-                </div>
+<div
+    style="
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 10px;
+        background: #f5f9ff;
+        border: 1px solid #d9e2f2;
+    "
+>
+    <strong>AI Analysis Result</strong>
 
-                <button class="secondary-btn">
-                    Analyze Email →
-                </button>
+    <p style="margin: 8px 0 0;">
+        Prediction:
+        <strong>{{ ai_result }}</strong>
+    </p>
+
+</div>
+
+{% endif %}
 
             </div>
 
