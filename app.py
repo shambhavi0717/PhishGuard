@@ -204,6 +204,15 @@ def analyze_email():
 
 
 # -----------------------------
+# Awareness Page
+# -----------------------------
+@app.route("/awareness")
+def awareness():
+    return render_template("awareness.html")
+
+
+
+# -----------------------------
 # Simulations Page
 # -----------------------------
 @app.route("/simulations")
