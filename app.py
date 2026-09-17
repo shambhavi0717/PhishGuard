@@ -217,7 +217,6 @@ def awareness():
 # -----------------------------
 @app.route("/simulations")
 def simulations():
-
     connection = get_db_connection()
 
     simulations_data = connection.execute("""
@@ -225,11 +224,42 @@ def simulations():
         ORDER BY id DESC
     """).fetchall()
 
+    # Total simulations
+    total_simulations = connection.execute("""
+        SELECT COUNT(*) FROM simulations
+    """).fetchone()[0]
+
+    # Total participants
+    total_participants = connection.execute("""
+        SELECT COALESCE(SUM(participants), 0)
+        FROM campaign_metrics
+    """).fetchone()[0]
+
+    # Average click rate
+    click_data = connection.execute("""
+        SELECT
+            COALESCE(SUM(links_clicked), 0) AS total_clicked,
+            COALESCE(SUM(emails_delivered), 0) AS total_delivered
+        FROM campaign_metrics
+    """).fetchone()
+
+    if click_data["total_delivered"] > 0:
+        average_click_rate = round(
+            (click_data["total_clicked"] * 100.0)
+            / click_data["total_delivered"],
+            1
+        )
+    else:
+        average_click_rate = 0
+
     connection.close()
 
     return render_template(
         "simulations.html",
-        simulations=simulations_data
+        simulations=simulations_data,
+        total_simulations=total_simulations,
+        total_participants=total_participants,
+        average_click_rate=average_click_rate
     )
 
 # Simulation Details
