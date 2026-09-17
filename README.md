@@ -1,4 +1,4 @@
-# PhishGuard – AI-Based Ethical Phishing Simulation & Awareness Platform
+# PhishGuard – AI-enhanced Ethical Phishing Simulation & Awareness Platform
 
 PhishGuard is a web-based cybersecurity awareness platform designed to simulate phishing campaigns in a safe, controlled environment. It helps demonstrate how phishing simulations can be created, monitored, analyzed, and used for security awareness training.
 
